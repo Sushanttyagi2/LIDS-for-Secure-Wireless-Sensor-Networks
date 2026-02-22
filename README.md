@@ -17,7 +17,7 @@ Selective forwarding attacks
 Sybil attacks
 Spoofing attacks
 Traditional security mechanisms like heavy cryptographic systems and centralized IDS frameworks are not suitable due to:
-Limited battery life
+Limited battery life.
 
 #4 Objectives
 Understand WSN security threats
