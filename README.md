@@ -57,7 +57,7 @@ Energy Consumption
 
 #6 Technology Stack
 Programming Language
-Python 3.x
+Python 
 Libraries
 NumPy
 Pandas
