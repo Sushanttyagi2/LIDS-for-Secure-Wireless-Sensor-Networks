@@ -39,7 +39,7 @@ Traffic patterns
 Packet drop rates
 Routing changes
 Node energy usage
-Hybrid detection:
+Hybrid detection.
 Rule-based detection
 Decision Tree / Isolation Forest
 
