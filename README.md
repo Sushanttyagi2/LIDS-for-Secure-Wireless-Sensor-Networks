@@ -72,6 +72,11 @@ Due to file size limits, the full dataset is not included in this repo.
 - **Size:** ~550 MB
 NetworkX (for network modeling)
 Tools
+## 📊 Dataset
+This project uses the **IoT dataset for Intrusion Detection Systems (IDS)**
+- **Source:** [Kaggle - IoT IDS Dataset](https://www.kaggle.com/datasets/azalhowaide/iot-dataset-for-intrusion-detection-systems-ids)
+- **Description:** It contains 23 statistically engineered features (mean, variance, count, etc.) extracted over 10-second windows.
+- **Target Labels:** `0` for Attacks (Mirai, Gafgyt) and `1` for Normal samples.
 Jupyter Notebook
 VS Code
 Git & GitHub
