@@ -63,6 +63,13 @@ NumPy
 Pandas
 Scikit-learn
 Matplotlib
+
+## 📊 Dataset
+The models are trained using the **WSN-DS Dataset**. 
+Due to file size limits, the full dataset is not included in this repo.
+- **Download Link:** [[Link to your Kaggle dataset here](https://www.kaggle.com/datasets/azalhowaide/iot-dataset-for-intrusion-detection-systems-ids)]
+- **Format:** CSV
+- **Size:** ~550 MB
 NetworkX (for network modeling)
 Tools
 Jupyter Notebook
