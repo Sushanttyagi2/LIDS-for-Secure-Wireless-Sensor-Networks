@@ -4,7 +4,7 @@
   "metadata": {
     "colab": {
       "provenance": [],
-      "authorship_tag": "ABX9TyNxV9ceWStu8xhpM76onZEO",
+      "authorship_tag": "ABX9TyOSFnFQB8xTTqTsUJjkDkc3",
       "include_colab_link": true
     },
     "kernelspec": {
@@ -46,7 +46,7 @@
         "st.write(\"Detect whether a sensor node is under attack\")\n",
         "\n",
         "# ===============================\n",
-        "# Data Simulation (same logic)\n",
+        "# Data Simulation\n",
         "# ===============================\n",
         "def generate_data(num_nodes=100, attack=False):\n",
         "    data = []\n",
@@ -68,7 +68,7 @@
         "    return pd.DataFrame(data, columns=[\"packet_rate\", \"drop_rate\", \"energy\", \"label\"])\n",
         "\n",
         "# ===============================\n",
-        "# Train Model (auto)\n",
+        "# Train Model\n",
         "# ===============================\n",
         "@st.cache_resource\n",
         "def train_model():\n",
@@ -97,7 +97,7 @@
         "    return 0\n",
         "\n",
         "# ===============================\n",
-        "# Inputs (UI)\n",
+        "# UI Inputs\n",
         "# ===============================\n",
         "st.subheader(\"Enter Node Parameters\")\n",
         "\n",
@@ -112,12 +112,18 @@
         "    sample = [packet_rate, drop_rate, energy]\n",
         "\n",
         "    ml_pred = model.predict([sample])[0]\n",
-        "    rule_pred = rule_based_detection(*sample)\n",
+        "    rule_pred = rule_based_detection(packet_rate, drop_rate, energy)\n",
         "\n",
         "    if ml_pred == 1 or rule_pred == 1:\n",
         "        st.error(\"⚠️ ATTACK DETECTED\")\n",
         "    else:\n",
-        "        st.success(\"✅ NORMAL NODE\")"
+        "        st.success(\"✅ NORMAL NODE\")\n",
+        "\n",
+        "# ===============================\n",
+        "# Info Section\n",
+        "# ===============================\n",
+        "st.write(\"### Detection Logic\")\n",
+        "st.write(\"Rule: Drop Rate > 0.3 OR Energy < 0.3 → Attack\")"
       ],
       "metadata": {
         "id": "hKsMrvQV5ANx"
