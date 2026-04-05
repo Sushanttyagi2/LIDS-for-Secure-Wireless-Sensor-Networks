@@ -1,171 +1,127 @@
-{
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "provenance": [],
-      "authorship_tag": "ABX9TyMm6V9VP6uDMJuuSEiGr5HP",
-      "include_colab_link": True
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    }
-  },
-  "cells": [
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "view-in-github",
-        "colab_type": "text"
-      },
-      "source": [
-        "<a href=\"https://colab.research.google.com/github/Sushanttyagi2/LIDS-for-Secure-Wireless-Sensor-Networks/blob/main/app/app.py\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# ===============================\n",
-        "# Premium UI - Lightweight IDS\n",
-        "# ===============================\n",
-        "\n",
-        "import streamlit as st\n",
-        "import numpy as np\n",
-        "import pandas as pd\n",
-        "import matplotlib.pyplot as plt\n",
-        "from sklearn.tree import DecisionTreeClassifier\n",
-        "from sklearn.model_selection import train_test_split\n",
-        "\n",
-        "# ===============================\n",
-        "# Page Config\n",
-        "# ===============================\n",
-        "st.set_page_config(page_title=\"WSN IDS\", layout=\"wide\")\n",
-        "\n",
-        "# ===============================\n",
-        "# Title\n",
-        "# ===============================\n",
-        "st.title(\"🔐 Lightweight IDS for WSN\")\n",
-        "st.markdown(\"### Real-time Intrusion Detection using ML + Rule-Based System\")\n",
-        "\n",
-        "# ===============================\n",
-        "# Sidebar\n",
-        "# ===============================\n",
-        "st.sidebar.header(\"⚙️ Settings\")\n",
-        "\n",
-        "num_nodes = st.sidebar.slider(\"Training Data Size\", 100, 1000, 700)\n",
-        "\n",
-        "st.sidebar.markdown(\"---\")\n",
-        "st.sidebar.info(\"Hybrid IDS: Decision Tree + Rule-Based Detection\")\n",
-        "\n",
-        "# ===============================\n",
-        "# Data Simulation\n",
-        "# ===============================\n",
-        "def generate_data(num_nodes=100, attack=False):\n",
-        "    data = []\n",
-        "    for i in range(num_nodes):\n",
-        "        packet_rate = np.random.uniform(10, 100)\n",
-        "        drop_rate = np.random.uniform(0, 0.1)\n",
-        "        energy = np.random.uniform(0.5, 1.0)\n",
-        "\n",
-        "        label = 0\n",
-        "\n",
-        "        if attack:\n",
-        "            drop_rate = np.random.uniform(0.3, 0.7)\n",
-        "            energy = np.random.uniform(0.1, 0.4)\n",
-        "            label = 1\n",
-        "\n",
-        "        data.append([packet_rate, drop_rate, energy, label])\n",
-        "\n",
-        "    return pd.DataFrame(data, columns=[\"packet_rate\", \"drop_rate\", \"energy\", \"label\"])\n",
-        "\n",
-        "# ===============================\n",
-        "# Train Model\n",
-        "# ===============================\n",
-        "@st.cache_resource\n",
-        "def train_model(n):\n",
-        "    normal = generate_data(n, False)\n",
-        "    attack = generate_data(int(n*0.4), True)\n",
-        "    df = pd.concat([normal, attack])\n",
-        "\n",
-        "    X = df[[\"packet_rate\", \"drop_rate\", \"energy\"]]\n",
-        "    y = df[\"label\"]\n",
-        "\n",
-        "    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\n",
-        "\n",
-        "    model = DecisionTreeClassifier()\n",
-        "    model.fit(X_train, y_train)\n",
-        "\n",
-        "    return model, df\n",
-        "\n",
-        "model, df = train_model(num_nodes)\n",
-        "\n",
-        "# ===============================\n",
-        "# Layout (2 columns)\n",
-        "# ===============================\n",
-        "col1, col2 = st.columns(2)\n",
-        "\n",
-        "# ===============================\n",
-        "# INPUT SECTION\n",
-        "# ===============================\n",
-        "with col1:\n",
-        "    st.subheader(\"📥 Enter Node Parameters\")\n",
-        "\n",
-        "    packet_rate = st.slider(\"Packet Rate\", 0.0, 100.0, 50.0)\n",
-        "    drop_rate = st.slider(\"Drop Rate\", 0.0, 1.0, 0.1)\n",
-        "    energy = st.slider(\"Energy Level\", 0.0, 1.0, 0.8)\n",
-        "\n",
-        "    detect_btn = st.button(\"🚨 Detect Attack\")\n",
-        "\n",
-        "# ===============================\n",
-        "# DETECTION LOGIC\n",
-        "# ===============================\n",
-        "def rule_based_detection(packet_rate, drop_rate, energy):\n",
-        "    if drop_rate > 0.3 or energy < 0.3:\n",
-        "        return 1\n",
-        "    return 0\n",
-        "\n",
-        "# ===============================\n",
-        "# OUTPUT SECTION\n",
-        "# ===============================\n",
-        "with col2:\n",
-        "    st.subheader(\"📊 Detection Result\")\n",
-        "\n",
-        "    if detect_btn:\n",
-        "        sample = [packet_rate, drop_rate, energy]\n",
-        "\n",
-        "        ml_pred = model.predict([sample])[0]\n",
-        "        rule_pred = rule_based_detection(*sample)\n",
-        "\n",
-        "        if ml_pred == 1 or rule_pred == 1:\n",
-        "            st.error(\"⚠️ ATTACK DETECTED\")\n",
-        "        else:\n",
-        "            st.success(\"✅ NORMAL NODE\")\n",
-        "\n",
-        "        # Metrics\n",
-        "        st.metric(\"Drop Rate\", f\"{drop_rate:.2f}\")\n",
-        "        st.metric(\"Energy Level\", f\"{energy:.2f}\")\n",
-        "\n",
-        "# ===============================\n",
-        "# GRAPH SECTION\n",
-        "# ===============================\n",
-        "st.subheader(\"📈 Network Traffic Visualization\")\n",
-        "\n",
-        "fig, ax = plt.subplots()\n",
-        "ax.scatter(df[\"packet_rate\"], df[\"drop_rate\"], c=df[\"label\"])\n",
-        "ax.set_xlabel(\"Packet Rate\")\n",
-        "ax.set_ylabel(\"Drop Rate\")\n",
-        "\n",
-        "st.pyplot(fig)"
-      ],
-      "metadata": {
-        "id": "hKsMrvQV5ANx"
-      },
-      "execution_count": 1,
-      "outputs": []
-    }
-  ]
-}
+# ===============================
+# Premium UI - Lightweight IDS
+# ===============================
+
+import streamlit as st
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+
+# ===============================
+# Page Config
+# ===============================
+st.set_page_config(page_title="WSN IDS", layout="wide")
+
+# ===============================
+# Title
+# ===============================
+st.title("🔐 Lightweight IDS for WSN")
+st.markdown("### Real-time Intrusion Detection using ML + Rule-Based System")
+
+# ===============================
+# Sidebar
+# ===============================
+st.sidebar.header("⚙️ Settings")
+num_nodes = st.sidebar.slider("Training Data Size", 100, 1000, 700)
+
+st.sidebar.markdown("---")
+st.sidebar.info("Hybrid IDS: Decision Tree + Rule-Based Detection")
+
+# ===============================
+# Data Simulation
+# ===============================
+def generate_data(num_nodes=100, attack=False):
+    data = []
+    for _ in range(num_nodes):
+        packet_rate = np.random.uniform(10, 100)
+        drop_rate = np.random.uniform(0, 0.1)
+        energy = np.random.uniform(0.5, 1.0)
+
+        label = 0
+
+        if attack:
+            drop_rate = np.random.uniform(0.3, 0.7)
+            energy = np.random.uniform(0.1, 0.4)
+            label = 1
+
+        data.append([packet_rate, drop_rate, energy, label])
+
+    return pd.DataFrame(data, columns=["packet_rate", "drop_rate", "energy", "label"])
+
+# ===============================
+# Train Model
+# ===============================
+@st.cache_resource
+def train_model(n):
+    normal = generate_data(n, False)
+    attack = generate_data(int(n * 0.4), True)
+    df = pd.concat([normal, attack])
+
+    X = df[["packet_rate", "drop_rate", "energy"]]
+    y = df["label"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    model = DecisionTreeClassifier()
+    model.fit(X_train, y_train)
+
+    return model, df
+
+model, df = train_model(num_nodes)
+
+# ===============================
+# Layout
+# ===============================
+col1, col2 = st.columns(2)
+
+# ===============================
+# Input Section
+# ===============================
+with col1:
+    st.subheader("📥 Enter Node Parameters")
+
+    packet_rate = st.slider("Packet Rate", 0.0, 100.0, 50.0)
+    drop_rate = st.slider("Drop Rate", 0.0, 1.0, 0.1)
+    energy = st.slider("Energy Level", 0.0, 1.0, 0.8)
+
+    detect_btn = st.button("🚨 Detect Attack")
+
+# ===============================
+# Detection Logic
+# ===============================
+def rule_based_detection(packet_rate, drop_rate, energy):
+    return 1 if (drop_rate > 0.3 or energy < 0.3) else 0
+
+# ===============================
+# Output Section
+# ===============================
+with col2:
+    st.subheader("📊 Detection Result")
+
+    if detect_btn:
+        sample = [packet_rate, drop_rate, energy]
+
+        ml_pred = model.predict([sample])[0]
+        rule_pred = rule_based_detection(*sample)
+
+        if ml_pred == 1 or rule_pred == 1:
+            st.error("⚠️ ATTACK DETECTED")
+        else:
+            st.success("✅ NORMAL NODE")
+
+        st.metric("Drop Rate", f"{drop_rate:.2f}")
+        st.metric("Energy Level", f"{energy:.2f}")
+
+# ===============================
+# Graph Section
+# ===============================
+st.subheader("📈 Network Traffic Visualization")
+
+fig, ax = plt.subplots()
+scatter = ax.scatter(df["packet_rate"], df["drop_rate"], c=df["label"])
+ax.set_xlabel("Packet Rate")
+ax.set_ylabel("Drop Rate")
+
+st.pyplot(fig)
