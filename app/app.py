@@ -1,0 +1,129 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNxV9ceWStu8xhpM76onZEO",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Sushanttyagi2/LIDS-for-Secure-Wireless-Sensor-Networks/blob/main/app/app.py\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# ===============================\n",
+        "# Lightweight IDS UI (Streamlit)\n",
+        "# ===============================\n",
+        "\n",
+        "import streamlit as st\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "from sklearn.tree import DecisionTreeClassifier\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "\n",
+        "# ===============================\n",
+        "# Title\n",
+        "# ===============================\n",
+        "st.title(\"🔐 Lightweight IDS for WSN\")\n",
+        "st.write(\"Detect whether a sensor node is under attack\")\n",
+        "\n",
+        "# ===============================\n",
+        "# Data Simulation (same logic)\n",
+        "# ===============================\n",
+        "def generate_data(num_nodes=100, attack=False):\n",
+        "    data = []\n",
+        "\n",
+        "    for i in range(num_nodes):\n",
+        "        packet_rate = np.random.uniform(10, 100)\n",
+        "        drop_rate = np.random.uniform(0, 0.1)\n",
+        "        energy = np.random.uniform(0.5, 1.0)\n",
+        "\n",
+        "        label = 0\n",
+        "\n",
+        "        if attack:\n",
+        "            drop_rate = np.random.uniform(0.3, 0.7)\n",
+        "            energy = np.random.uniform(0.1, 0.4)\n",
+        "            label = 1\n",
+        "\n",
+        "        data.append([packet_rate, drop_rate, energy, label])\n",
+        "\n",
+        "    return pd.DataFrame(data, columns=[\"packet_rate\", \"drop_rate\", \"energy\", \"label\"])\n",
+        "\n",
+        "# ===============================\n",
+        "# Train Model (auto)\n",
+        "# ===============================\n",
+        "@st.cache_resource\n",
+        "def train_model():\n",
+        "    normal = generate_data(500, attack=False)\n",
+        "    attack = generate_data(200, attack=True)\n",
+        "    df = pd.concat([normal, attack])\n",
+        "\n",
+        "    X = df[[\"packet_rate\", \"drop_rate\", \"energy\"]]\n",
+        "    y = df[\"label\"]\n",
+        "\n",
+        "    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\n",
+        "\n",
+        "    model = DecisionTreeClassifier()\n",
+        "    model.fit(X_train, y_train)\n",
+        "\n",
+        "    return model\n",
+        "\n",
+        "model = train_model()\n",
+        "\n",
+        "# ===============================\n",
+        "# Rule-Based Detection\n",
+        "# ===============================\n",
+        "def rule_based_detection(packet_rate, drop_rate, energy):\n",
+        "    if drop_rate > 0.3 or energy < 0.3:\n",
+        "        return 1\n",
+        "    return 0\n",
+        "\n",
+        "# ===============================\n",
+        "# Inputs (UI)\n",
+        "# ===============================\n",
+        "st.subheader(\"Enter Node Parameters\")\n",
+        "\n",
+        "packet_rate = st.slider(\"Packet Rate\", 0.0, 100.0, 50.0)\n",
+        "drop_rate = st.slider(\"Drop Rate\", 0.0, 1.0, 0.1)\n",
+        "energy = st.slider(\"Energy Level\", 0.0, 1.0, 0.8)\n",
+        "\n",
+        "# ===============================\n",
+        "# Detection Button\n",
+        "# ===============================\n",
+        "if st.button(\"🚨 Detect\"):\n",
+        "    sample = [packet_rate, drop_rate, energy]\n",
+        "\n",
+        "    ml_pred = model.predict([sample])[0]\n",
+        "    rule_pred = rule_based_detection(*sample)\n",
+        "\n",
+        "    if ml_pred == 1 or rule_pred == 1:\n",
+        "        st.error(\"⚠️ ATTACK DETECTED\")\n",
+        "    else:\n",
+        "        st.success(\"✅ NORMAL NODE\")"
+      ],
+      "metadata": {
+        "id": "hKsMrvQV5ANx"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
