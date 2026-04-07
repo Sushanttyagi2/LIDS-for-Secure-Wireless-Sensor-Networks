@@ -71,6 +71,7 @@ Due to file size limits, the full dataset is not included in this repo.
 - **Format:** CSV
 - **Size:** ~550 MB
 NetworkX (for network modeling)
+https://grok.com/share/c2hhcmQtMg_c2f1c860-2870-4757-a579-d43a048a6bb8
 Tools
 ## 📊 Dataset
 This project uses the **IoT dataset for Intrusion Detection Systems (IDS)**
