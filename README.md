@@ -61,7 +61,13 @@ python -m venv venv
 # Windows:
 venv\Scripts\activate
 # Linux / Mac:
-# source venv/bin/activate
+source venv/bin/activate
+
+# Run full simulation
+python main_simulation.py
+
+# Launch interactive dashboard
+streamlit run app/app.py
 
 # 3. Install dependencies
 pip install -r requirements.txt
