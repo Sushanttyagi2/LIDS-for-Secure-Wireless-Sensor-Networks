@@ -9,6 +9,45 @@ import joblib
 import time
 from pathlib import Path
 
+# ====================== FIX FOR STREAMLIT CLOUD ======================
+# Add the project root to Python path so it can find the 'src' folder
+current_dir = Path(_file_).parent.parent  # This goes one level up from app/ to root
+sys.path.append(str(current_dir))
+
+# Now import from src
+from src.ids_hybrid import LightweightHybridIDS
+# =====================================================================
+
+# Page Configuration
+st.set_page_config(
+    page_title="LIDS-WSN",
+    page_icon="🛡️",
+    layout="wide"
+)
+
+st.title("🛡️ Lightweight Hybrid Intrusion Detection System for WSN")
+st.markdown("A *Deep Tech* energy-efficient hybrid IDS for Wireless Sensor Networks.")
+
+# Load the model
+@st.cache_resource
+def load_model():
+    try:
+        ids = LightweightHybridIDS()
+        ids.load_model('models/')          # Make sure models/ folder exists
+        return ids
+    except Exception as e:
+        st.error(f"❌ Model loading failed: {e}")
+        st.info("Please run python main_simulation.py locally first, then redeploy.")
+        return None
+
+ids_model = load_model()
+
+# Rest of your code remains the same...
+# (Home, Live Detection, Model Info, About pages)
+
+if ids_model is None:
+    st.stop()
+'''
 # Import from src
 from src.ids_hybrid import LightweightHybridIDS
 
@@ -43,6 +82,7 @@ def load_model():
         return None
 
 ids_model = load_model()
+'''
 
 # ====================== HOME PAGE ======================
 if page == "Home":
