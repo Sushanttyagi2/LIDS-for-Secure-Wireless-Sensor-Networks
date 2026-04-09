@@ -92,6 +92,7 @@ pip install -r requirements.txt
 4. Google Colab Version
    Open wsn_ids_colab.py in Google Colab and run all cells.
 
+---
 
 📊 Expected Results
 
@@ -102,6 +103,7 @@ Confusion Matrix
 Feature Importance
 Energy vs Accuracy Trade-off
 
+---
 
 ## 🔬 Supported Attack Types
 
@@ -112,6 +114,8 @@ Energy vs Accuracy Trade-off
 | **Sybil**                 | Creates multiple fake identities                 | Sudden increase in neighbor count + Routing changes | Decision Tree                  |
 | **Spoofing**              | Forges identity of legitimate nodes              | Very low energy level + High routing changes        | Rule-based (Primary)           |
 
+---
+
 🖥️ Web Dashboard Features
 
 Real-time attack detection by adjusting sensor parameters
@@ -119,6 +123,7 @@ Live prediction with latency display
 Model information and dataset overview
 Clean and user-friendly interface
 
+---
 
 🛠 Technologies Used
 
@@ -129,6 +134,7 @@ matplotlib & seaborn
 Streamlit (Web UI)
 joblib (Model persistence)
 
+---
 
 📌 Future Enhancements (Planned)
 
@@ -147,7 +153,9 @@ If you like this project, feel free to ⭐ star the repository!
 📄 License
 This project is licensed under the MIT License — see the LICENSE file for details.
 
+---
 
+# problem statement
 
 Lightweight Intrusion Detection System for Secure Wireless Sensor Networks.
 
