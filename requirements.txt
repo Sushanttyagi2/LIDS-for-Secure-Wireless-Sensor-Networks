@@ -17,8 +17,16 @@ seaborn>=0.11.0
 # Environment & Notebooks
 jupyter>=1.0.0
 
-streamlit
+# Core dependencies
 numpy
 pandas
 scikit-learn
 matplotlib
+seaborn
+joblib
+
+# Web Dashboard
+streamlit
+
+# Optional but recommended for better experience
+tqdm
