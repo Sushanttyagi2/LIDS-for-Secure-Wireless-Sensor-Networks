@@ -92,7 +92,6 @@ pip install -r requirements.txt
 4. Google Colab Version
    Open wsn_ids_colab.py in Google Colab and run all cells.
 
-s.
 
 📊 Expected Results
 
@@ -104,14 +103,14 @@ Feature Importance
 Energy vs Accuracy Trade-off
 
 
+## 🔬 Supported Attack Types
 
-🔬 Supported Attacks
-
-Attack Type,Main Indicators Detected By
-Sinkhole,High packet rate + High drop rate
-Selective Forwarding,Moderate to high packet drop rate
-Sybil,Sudden increase in neighbor count
-Spoofing,Very low energy + High routing changes
+| Attack Type               | Description                                      | Key Indicators Detected By                          | Detection Method Used          |
+|---------------------------|--------------------------------------------------|-----------------------------------------------------|--------------------------------|
+| **Sinkhole**              | Attacker attracts all traffic towards itself     | High packet rate + Very high drop rate              | Rule-based + Decision Tree     |
+| **Selective Forwarding**  | Drops selected packets instead of forwarding     | Moderate to high packet drop rate                   | Rule-based (Primary)           |
+| **Sybil**                 | Creates multiple fake identities                 | Sudden increase in neighbor count + Routing changes | Decision Tree                  |
+| **Spoofing**              | Forges identity of legitimate nodes              | Very low energy level + High routing changes        | Rule-based (Primary)           |
 
 🖥️ Web Dashboard Features
 
