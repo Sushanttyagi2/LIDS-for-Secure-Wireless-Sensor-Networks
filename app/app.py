@@ -9,103 +9,6 @@ import joblib
 import time
 from pathlib import Path
 
-# ======================
-try:
-    # Get the directory of the current file (app.py)
-    current_file = Path(_file_).resolve()
-    app_dir = current_file.parent          # app/ folder
-    root_dir = app_dir.parent             # Project root folder
-    
-    # Add root directory to Python path
-    if str(root_dir) not in sys.path:
-        sys.path.append(str(root_dir))
-    
-    # Also try adding absolute path as backup
-    sys.path.insert(0, str(root_dir))
-    
-    print(f"✅ Root directory added to path: {root_dir}")
-    
-except Exception as e:
-    st.warning(f"Path setup warning: {e}")
-
-# Now import from src
-try:
-    from src.ids_hybrid import LightweightHybridIDS
-except ImportError as e:
-    st.error(f"❌ Import Error: {e}")
-    st.error("Could not import from 'src' folder. Make sure the folder structure is correct.")
-    st.stop()
-# =====================================================================
-
-# Page Configuration
-st.set_page_config(
-    page_title="LIDS-WSN",
-    page_icon="🛡️",
-    layout="wide"
-)
-
-st.title("🛡️ Lightweight Hybrid Intrusion Detection System for WSN")
-st.caption("Deep Tech | Energy-Efficient Hybrid IDS for Wireless Sensor Networks")
-
-# Load Model
-@st.cache_resource
-def load_model():
-    try:
-        ids = LightweightHybridIDS()
-        ids.load_model('models/')
-        st.success("✅ Model loaded successfully!")
-        return ids
-    except Exception as e:
-        st.error(f"❌ Failed to load model: {e}")
-        st.info("💡 *Solution*: Run python main_simulation.py locally first, then commit & redeploy.")
-        return None
-
-ids_model = load_model()
-
-if ids_model is None:
-    st.stop()
-
-# ====================== Your Existing Pages ======================
-
-# Sidebar
-page = st.sidebar.radio("Navigation", ["Home", "Live Detection", "Model Info", "About"])
-
-# ... (Keep all your previous page code here - Home, Live Detection, etc.)
-
-# Example: Live Detection Page (shortened)
-if page == "Live Detection":
-    st.header("🔴 Live Attack Detection")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        packet_rate = st.slider("Packet Rate", 10.0, 120.0, 50.0)
-        drop_rate = st.slider("Drop Rate", 0.0, 1.0, 0.1, 0.01)
-        energy_level = st.slider("Energy Level", 0.0, 1.0, 0.8, 0.01)
-    
-    with col2:
-        routing_changes = st.slider("Routing Changes", 0, 20, 2)
-        neighbor_count = st.slider("Neighbor Count", 3, 25, 7)
-        traffic_anomaly = st.slider("Traffic Anomaly", 0.5, 3.0, 1.2, 0.1)
-    
-    if st.button("🚨 Detect", type="primary"):
-        sample = {
-            'packet_rate': packet_rate,
-            'drop_rate': drop_rate,
-            'energy_level': energy_level,
-            'routing_changes': routing_changes,
-            'neighbor_count': neighbor_count,
-            'traffic_anomaly': traffic_anomaly
-        }
-        
-        result, latency, method = ids_model.predict(sample)
-        
-        if result == "ATTACK":
-            st.error("🔴 ATTACK DETECTED!")
-        else:
-            st.success("🟢 NORMAL NODE DETECTED")
-        
-        st.info(f"*Method:* {method} | *Latency:* {latency:.6f} sec")
-'''
 # Import from src
 from src.ids_hybrid import LightweightHybridIDS
 
@@ -140,7 +43,6 @@ def load_model():
         return None
 
 ids_model = load_model()
-'''
 
 # ====================== HOME PAGE ======================
 if page == "Home":
