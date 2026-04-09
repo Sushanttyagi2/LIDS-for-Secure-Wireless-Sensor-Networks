@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Lightweight Hybrid Intrusion Detection System (LIDS) for Wireless Sensor Networks
 Clean version for GitHub + Google Colab
