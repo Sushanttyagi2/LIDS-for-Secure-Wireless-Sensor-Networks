@@ -6,6 +6,8 @@ Fully integrated with src package (modular & clean)
 
 import os
 import pandas as pd
+import sys
+sys.path.append(os.getcwd())
 from sklearn.model_selection import train_test_split
 
 # Import from src modules
