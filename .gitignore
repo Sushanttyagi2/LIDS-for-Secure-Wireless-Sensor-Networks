@@ -1,0 +1,53 @@
+# Virtual Environment
+venv/
+env/
+.venv/
+ENV/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Models and large binary files (Important for your project)
+models/*.pkl
+models/lids_decision_tree.pkl
+models/scaler.pkl
+
+# Datasets (optional - keep only small files)
+Dataset/*.csv
+*.csv
+
+# Results and plots (you can keep important plots if you want)
+# results/*.png
+# results/*.jpg
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Streamlit
+.streamlit/
+
+# Logs
+*.log
