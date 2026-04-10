@@ -9,6 +9,25 @@ A **lightweight and energy-efficient** Hybrid Intrusion Detection System designe
 
 It combines **Rule-based detection** (fast & low-energy) with **Decision Tree** (accurate & interpretable) to detect common WSN attacks while minimizing battery consumption.
 
+## 🚀 Try the Interactive Demo
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)]([https://your-app-name.streamlit.app](https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/))
+
+**Live Demo:** [Open Interactive Dashboard]([https://your-app-name.streamlit.app](https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/))
+
+Click the badge above or the link to test the **Live Attack Detection** directly in your browser!
+---
+
+## 🌟 Project Overview
+
+This project addresses a critical challenge in IoT and WSN systems:
+
+> **How to detect attacks efficiently while consuming minimum battery and computational resources?**
+
+It uses a smart **Hybrid Approach**:
+- **Rule-based detection** (very fast & low energy)
+- **Decision Tree** (lightweight ML model) as intelligent fallback
+
 ---
 
 ## ✨ Key Features
@@ -56,41 +75,47 @@ git clone https://github.com/Sushanttyagi2/LIDS-for-Secure-Wireless-Sensor-Netwo
 cd LIDS-for-Secure-Wireless-Sensor-Networks
 
 # 2. Create virtual environment (Recommended)
+```
+# Clone the repository
+git clone https://github.com/Sushanttyagi2/LIDS-for-Secure-Wireless-Sensor-Networks.git
+cd LIDS-for-Secure-Wireless-Sensor-Networks
+
+# Create and activate virtual environment
 python -m venv venv
+venv\Scripts\activate          # Windows
+# source venv/bin/activate     # Linux/Mac
 
-# Windows:
-venv\Scripts\activate
-# Linux / Mac:
-source venv/bin/activate
-
-# Run full simulation
-python main_simulation.py
-
-# Launch interactive dashboard
-streamlit run app/app.py
-
-# 3. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
+```
+
 ## 🚀 How to Run
-1. Full Simulation (Recommended)
+1. Full Simulation & Training (Must Run First)
+   ```
    python main_simulation.py
-   
-   What it does:
-   
-. Generates synthetic WSN dataset with attacks
-. Trains the Lightweight Hybrid IDS
-. Saves the best model (lids_decision_tree.pkl)
-. Generates evaluation plots and energy trade-off analysis
+   ```
+This command:
+
+. Generates synthetic WSN dataset
+. Trains the hybrid IDS model
+. Saves lids_decision_tree.pkl and scaler.pkl
+. Creates evaluation plots in results/ folder
 
 2. Test the Best Model
+   ```
    python use_best_model.py
+   ```
 
-3. Launch Web Dashboard (Interactive)
+4. Launch Web Dashboard (Interactive)
+   ```
    streamlit run app/app.py
+   ```
 
-4. Google Colab Version
+6. Google Colab Version
+   ```
    Open wsn_ids_colab.py in Google Colab and run all cells.
+   ```
 
 ---
 
@@ -116,6 +141,14 @@ Energy vs Accuracy Trade-off
 
 ---
 
+📊 Results Highlights
+
+. High detection accuracy with low computational cost
+. Rule-based detection used in most cases to save energy
+. Clear visualization of energy-security trade-off
+. Interactive dashboard for real-time testing
+
+---
 🖥️ Web Dashboard Features
 
 Real-time attack detection by adjusting sensor parameters
@@ -133,6 +166,16 @@ pandas, numpy
 matplotlib & seaborn
 Streamlit (Web UI)
 joblib (Model persistence)
+
+---
+
+📌 Use Cases
+
+. Smart Agriculture
+. Healthcare IoT Monitoring
+. Industrial IoT (IIoT)
+. Environmental Sensor Networks
+. Border Surveillance Systems
 
 ---
 
@@ -230,7 +273,6 @@ Due to file size limits, the full dataset is not included in this repo.
 - **Format:** CSV
 - **Size:** ~550 MB
 NetworkX (for network modeling) new
-https://grok.com/share/c2hhcmQtMg_c2f1c860-2870-4757-a579-d43a048a6bb8
 Tools
 ## 📊 Dataset
 This project uses the **IoT dataset for Intrusion Detection Systems (IDS)**
