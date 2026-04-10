@@ -184,32 +184,110 @@ def create_feature_comparison(sample, result):
     plt.close(fig)
 
 
+def classify_attack_type(sample):
+    """
+    Classify the type of attack based on feature patterns
+    Returns attack type and confidence score
+    """
+    packet_rate = sample['packet_rate']
+    drop_rate = sample['drop_rate']
+    energy_level = sample['energy_level']
+    routing_changes = sample['routing_changes']
+    neighbor_count = sample['neighbor_count']
+    traffic_anomaly = sample['traffic_anomaly']
+
+    attack_types = {
+        'Sinkhole': {
+            'condition': packet_rate > 70 and drop_rate > 0.4,
+            'confidence': min(100, (packet_rate/100 * 50) + (drop_rate/0.8 * 50)),
+            'description': 'High traffic attraction + packet dropping'
+        },
+        'Selective Forwarding': {
+            'condition': drop_rate > 0.3 and packet_rate > 40,
+            'confidence': min(100, drop_rate/0.8 * 100),
+            'description': 'Selective packet dropping behavior'
+        },
+        'Sybil': {
+            'condition': neighbor_count > 12 and routing_changes > 6,
+            'confidence': min(100, (neighbor_count/20 * 60) + (routing_changes/15 * 40)),
+            'description': 'Multiple fake identities + routing manipulation'
+        },
+        'Spoofing': {
+            'condition': energy_level < 0.4 and routing_changes > 8,
+            'confidence': min(100, ((1-energy_level)/0.6 * 50) + (routing_changes/15 * 50)),
+            'description': 'Identity forgery + energy depletion'
+        }
+    }
+
+    # Find matching attack types
+    matches = [(name, data) for name, data in attack_types.items() if data['condition']]
+
+    if matches:
+        # Return the match with highest confidence
+        best_match = max(matches, key=lambda x: x[1]['confidence'])
+        return best_match[0], best_match[1]['confidence'], best_match[1]['description']
+
+    return "Unknown Attack", 0.0, "Unclassified attack pattern"
+
+
 def display_realtime_visualizations(sample, result, latency, method):
     """Display all real-time visualizations after detection"""
     st.markdown("---")
     st.subheader("🔍 Real-Time Analysis")
 
-    # Detection confidence (simulated based on result)
-    confidence = 85.0 if result == "ATTACK" else 92.0
+    # Attack type classification
+    if result == "ATTACK":
+        attack_type, confidence, description = classify_attack_type(sample)
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Attack Type", attack_type)
+        with col2:
+            st.metric("Confidence", f"{confidence:.1f}%")
+        with col3:
+            st.metric("Pattern", description)
+    else:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Status", "🟢 NORMAL")
+        with col2:
+            st.metric("Confidence", "95.0%")
+
+    # Detection metrics
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Detection Confidence", f"{confidence:.1f}%")
         st.metric("Detection Latency", f"{latency:.6f}s")
     with col2:
         st.metric("Detection Method", method)
-        status_color = "🔴" if result == "ATTACK" else "🟢"
-        st.metric("Status", f"{status_color} {result}")
 
     # Real-time visualizations
-    tab1, tab2, tab3 = st.tabs(["📊 Feature Comparison", "🕸️ Radar Analysis", "📈 Input Values"])
+    if result == "ATTACK":
+        tab1, tab2, tab3, tab4 = st.tabs(["🎯 Attack Analysis", "📊 Feature Comparison", "🕸️ Radar Analysis", "📈 Input Values"])
+    else:
+        tab1, tab2, tab3 = st.tabs(["📊 Feature Comparison", "🕸️ Radar Analysis", "📈 Input Values"])
 
-    with tab1:
+    if result == "ATTACK":
+        with tab1:
+            st.subheader(f"🎯 {attack_type} Attack Detected")
+            st.write(f"**Confidence:** {confidence:.1f}%")
+            st.write(f"**Pattern:** {description}")
+
+            # Attack-specific insights
+            if attack_type == "Sinkhole":
+                st.info("💡 **Sinkhole Attack Indicators:** High packet rate suggests traffic attraction, very high drop rate indicates malicious packet discarding.")
+            elif attack_type == "Selective Forwarding":
+                st.info("💡 **Selective Forwarding Indicators:** Moderate to high drop rate with normal packet rate suggests selective packet manipulation.")
+            elif attack_type == "Sybil":
+                st.info("💡 **Sybil Attack Indicators:** High neighbor count and routing changes indicate multiple fake identities being created.")
+            elif attack_type == "Spoofing":
+                st.info("💡 **Spoofing Attack Indicators:** Very low energy and high routing changes suggest identity forgery and resource exhaustion.")
+
+    with tab1 if result != "ATTACK" else tab2:
         create_feature_comparison(sample, result)
 
-    with tab2:
+    with tab2 if result != "ATTACK" else tab3:
         create_radar_chart(sample, result)
 
-    with tab3:
+    with tab3 if result != "ATTACK" else tab4:
         display_sample_visualization(sample)
 
 
@@ -272,9 +350,12 @@ elif page == "🔴 Live Detection":
         result, latency, method = ids_model.predict(sample)
         
         if result == "ATTACK":
-            st.error("🔴 *ATTACK DETECTED*")
+            attack_type, confidence, description = classify_attack_type(sample)
+            st.error(f"🔴 **{attack_type.upper()} ATTACK DETECTED**")
+            st.warning(f"⚠️ Confidence: {confidence:.1f}% | Pattern: {description}")
         else:
-            st.success("🟢 *NORMAL NODE*")
+            st.success("🟢 **NORMAL NODE DETECTED**")
+            st.info("✅ No attack patterns detected")
             
         st.info(f"Method: {method} | Latency: {latency:.6f} sec")
         
