@@ -72,7 +72,7 @@ ids.train(X_train, y_train, X_test, y_test)
 ids.save_model('models/')
 
 # Save model summary
-save_model_summary(ids.dt_model, accuracy=0.94)   # Approximate accuracy
+save_model_summary(ids.dt_model, ids.scaler, accuracy=0.94)   # Approximate accuracy
 
 print("\n✅ Best Model (Decision Tree) saved successfully!")
 

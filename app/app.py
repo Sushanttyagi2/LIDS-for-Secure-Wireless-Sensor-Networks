@@ -13,7 +13,7 @@ from pathlib import Path
 # Force add the root directory to Python path
 try:
     # Get root directory (one level above app/)
-    root_dir = Path(_file_).resolve().parent.parent
+    root_dir = Path(__file__).resolve().parent.parent
     if str(root_dir) not in sys.path:
         sys.path.insert(0, str(root_dir))   # Insert at the beginning
     
@@ -62,8 +62,37 @@ ids_model = load_model()
 if ids_model is None:
     st.stop()
 
+# Helper visualization functions
+
+def display_sample_visualization(sample):
+    sample_df = pd.DataFrame([sample])
+    st.subheader("Input Feature Values")
+    st.bar_chart(sample_df.T)
+
+
+def display_saved_plots():
+    st.header("📈 Saved Visualizations")
+    results_dir = Path(__file__).resolve().parent.parent / "results"
+    image_files = [
+        ("Feature Importance", "feature_importance.png"),
+        ("Energy vs Accuracy", "energy_accuracy_tradeoff.png"),
+        ("Confusion Matrix", "confusion_matrix.png")
+    ]
+
+    plot_shown = False
+    for title, filename in image_files:
+        image_path = results_dir / filename
+        if image_path.exists():
+            st.subheader(title)
+            st.image(str(image_path), use_column_width=True)
+            plot_shown = True
+
+    if not plot_shown:
+        st.warning("No saved visualization images found. Run `python main_simulation.py` first to generate them.")
+
+
 # ====================== Navigation ======================
-page = st.sidebar.radio("Navigation", ["🏠 Home", "🔴 Live Detection", "📊 Model Info", "ℹ️ About"])
+page = st.sidebar.radio("Navigation", ["🏠 Home", "🔴 Live Detection", "📊 Model Info", "📈 Visualizations", "ℹ️ About"])
 
 # ====================== PAGES ======================
 
@@ -105,11 +134,15 @@ elif page == "🔴 Live Detection":
             st.success("🟢 *NORMAL NODE*")
             
         st.info(f"Method: {method} | Latency: {latency:.6f} sec")
+        display_sample_visualization(sample)
 
 elif page == "📊 Model Info":
     st.header("Model Information")
     st.write("*Best Model:* Decision Tree (Lightweight)")
     st.write("Hybrid Approach: Rule-based + Machine Learning")
+
+elif page == "📈 Visualizations":
+    display_saved_plots()
 
 elif page == "ℹ️ About":
     st.header("About")

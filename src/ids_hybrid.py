@@ -35,18 +35,23 @@ class LightweightHybridIDS:
         """Train the best lightweight model - Decision Tree"""
         print("Training Decision Tree (Best lightweight model for WSN)...")
         
-        self.dt_model = DecisionTreeClassifier(max_depth=6, random_state=42)
-        self.dt_model.fit(X_train, y_train)
+        # Scale features for the Decision Tree and prediction pipeline
+        self.scaler = StandardScaler()
+        X_train_scaled = self.scaler.fit_transform(X_train)
         
-        # Optional: Train Isolation Forest for anomaly detection
+        self.dt_model = DecisionTreeClassifier(max_depth=6, random_state=42)
+        self.dt_model.fit(X_train_scaled, y_train)
+        
+        # Optional: Train Isolation Forest for anomaly detection on scaled features
         self.iso_model = IsolationForest(n_estimators=80, contamination=0.25, random_state=42)
-        self.iso_model.fit(X_train)
+        self.iso_model.fit(X_train_scaled)
         
         print("✅ Training completed!")
         
         if X_test is not None and y_test is not None:
             from sklearn.metrics import classification_report, accuracy_score
-            y_pred = self.dt_model.predict(X_test)
+            X_test_scaled = self.scaler.transform(X_test)
+            y_pred = self.dt_model.predict(X_test_scaled)
             print("\nDecision Tree Performance:")
             print(classification_report(y_test, y_pred, target_names=['Normal', 'Attack']))
             print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
