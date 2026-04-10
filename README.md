@@ -11,11 +11,12 @@ It combines **Rule-based detection** (fast & low-energy) with **Decision Tree** 
 
 ## 🚀 Try the Interactive Demo
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)]([https://your-app-name.streamlit.app](https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/))
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)(https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/)]
 
-**Live Demo:** [Open Interactive Dashboard]([https://your-app-name.streamlit.app](https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/))
+**Live Demo:** [Open Interactive Dashboard](https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/)
 
 Click the badge above or the link to test the **Live Attack Detection** directly in your browser!
+
 ---
 
 ## 🌟 Project Overview
