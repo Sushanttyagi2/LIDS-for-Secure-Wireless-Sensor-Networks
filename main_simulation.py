@@ -42,7 +42,7 @@ print(f"   Normal : {len(df[df['label']==0])}")
 print(f"   Attack : {len(df[df['label']==1])}")
 
 # Save dataset
-df.to_csv('Dataset/WSN_Synthetic_Dataset.csv', index=False)
+df.to_csv('Dataset/WSN_Dataset.csv', index=False)
 print("✅ Synthetic dataset saved in 'Dataset/WSN_Synthetic_Dataset.csv'")
 
 # ===============================
