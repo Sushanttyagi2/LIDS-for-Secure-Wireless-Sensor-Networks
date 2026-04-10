@@ -11,7 +11,7 @@ It combines **Rule-based detection** (fast & low-energy) with **Decision Tree** 
 
 ## 🚀 Try the Interactive Demo
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)(https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/)]
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/)
 
 **Live Demo:** [Open Interactive Dashboard](https://lids-for-secure-wireless-sensor-networks-p6jq.onrender.com/)
 
